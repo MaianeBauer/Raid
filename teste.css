@@ -1,3 +1,14 @@
+:root {
+  --slide-items-quantity: 30; /* alterar conforme a quantidade de itens no html */
+
+  --slide-item-width: 110px; /* caso queira adicionar espaçamento, adiciona width
+                             * se adicionar gap no container, vai dar pra perceber
+                             * a animação reiniciando pq o gap não vai ser calculado
+                             * na animação
+                             */
+  --slide-speed: 0.5s; /* zooooooooooooooooooooooooooooooooooooooooommmmmmmmmmmmmmmmmmmmm */
+}
+
 body {
   font-family: "Arial", sans-serif;
   margin: 0;
@@ -504,37 +515,37 @@ a:hover {
 .logo-slider-container {
   width: 100%;
   overflow: hidden;
-  position: relative;
+  /* position: relative; caso queira voltar o commit que tava antes, já não tinha utilidade esse position relative... */
   background: #fff;
   padding: 20px 0;
 }
 
 .logo-track {
   display: flex;
-  gap: 40px;
-  animation: scroll 30s linear infinite;
+  width: calc(var(--slide-items-quantity) * var(--slide-item-width));
+  animation: scroll var(--slide-speed) linear infinite;
+}
+
+.logo-track .logo {
+  flex: 0 0 auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--slide-item-width);
+  height: 50px;
+  transition: transform 0.3s;
 }
 
 .logo-slider-container:hover .logo-track {
   animation-play-state: paused;
 }
 
-.logo {
-  flex: 0 0 auto;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 100px;
-  height: 50px;
-}
-
 .logo img {
-  max-height: 100%;
-  max-width: 100%;
-  transition: transform 0.3s;
+  height: 100%;
+  width: 100%;
 }
 
-.logo img:hover {
+.logo:hover {
   transform: scale(1.1);
 }
 
@@ -543,7 +554,13 @@ a:hover {
     transform: translateX(0);
   }
   100% {
-    transform: translateX(-100%);
+    transform: translateX(
+      calc((var(--slide-item-width) * -1) * (var(--slide-items-quantity) / 2))
+        /* tamanho de cada item no slide de forma negativa vezes a quantidade de itens dividido por 2
+        *  basicamente o transform vai ir até o ultimo item real que é a primeira metade dos itens e
+        *  aí a animação reinicia 
+        */
+    );
   }
 }
 
